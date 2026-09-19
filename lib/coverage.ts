@@ -55,8 +55,9 @@ export async function matchCoveragePrograms(input: {
 
   for (const program of programs) {
     const makeHit =
-      !!input.make &&
-      program.manufacturer.toLowerCase() === input.make.toLowerCase();
+      program.manufacturer.toLowerCase() === "multiple" ||
+      (!!input.make &&
+        program.manufacturer.toLowerCase() === input.make.toLowerCase());
     const modelHit =
       !!input.model &&
       modelsList(program.vehicleModels).some(
