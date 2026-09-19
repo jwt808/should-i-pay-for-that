@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f3eee4;
+  --paper-strong: #fffdf8;
+  --ink: #1c2430;
+  --muted: #5c6570;
+  --navy: #10243d;
+  --copper: #c05621;
+  --copper-dark: #9a4318;
+  --rule: #d8cfc0;
+  --flag: #8a1f1f;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-navy: var(--navy);
+  --color-copper: var(--copper);
+  --font-sans: var(--font-source-sans);
+  --font-serif: var(--font-newsreader);
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-source-sans), "Source Sans 3", sans-serif;
+}
+
+h1,
+h2,
+h3,
+.font-serif {
+  font-family: var(--font-newsreader), Newsreader, Georgia, serif;
+}
+
+@media print {
+  header,
+  footer,
+  .print\:hidden {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+}
