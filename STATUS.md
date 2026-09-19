@@ -20,6 +20,7 @@ Last updated: 2026-09-19
 - Customer case token page, printable report, refund request, outcome form
 - Analytics stubs for Meta Pixel / GA when IDs are set
 - Sample anonymized estimate fixtures
+- Local E2E verified with `DEV_BYPASS_CHECKOUT`: landing copy, NHTSA VIN decode against the live public API, fixture upload, paid investigation, admin approve, delivered report, refund request, outcome form
 
 ## Currently working on
 
