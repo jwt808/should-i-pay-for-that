@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Case {
+  id          String @id @default(cuid())
+  accessToken String @unique
+  /// Spec statuses plus AWAITING_PAYMENT for pre-checkout cases.
+  status      String @default("AWAITING_PAYMENT")
+
+  email                String?
+  vin                  String
+  mileage              Int
+  zip                  String
+  customerExplanation  String?
+  mechanicSaid         String?
+
+  vehicleYear         Int?
+  vehicleMake         String?
+  vehicleModel        String?
+  vehicleTrim         String?
+  vehicleEngine       String?
+  vehicleTransmission String?
+  vehicleDrivetrain   String?
+  vehicleBodyClass    String?
+  vehiclePlant        String?
+  vehicleConfirmed    Boolean @default(false)
+  vinUncertain        Boolean @default(false)
+  vinDecodeJson       String?
+
+  extractionJson       String?
+  extractionConfidence Float?
+
+  recallsJson         String?
+  coverageMatchesJson String?
+  reportJson          String?
+
+  quotedPrice       Float?
+  repairCategory    String?
+  potentialCoverage String?
+  reportConfidence  String?
+  reviewRequired    Boolean @default(true)
+  highRiskFlags     String?
+  reviewerNotes     String?
+
+  stripeCheckoutSessionId String?
+  stripePaymentIntentId   String?
+  paidAt                  DateTime?
+  deliveredAt             DateTime?
+
+  refundRequestedAt DateTime?
+  refundReason      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  files    CaseFile[]
+  outcomes Outcome[]
+}
+
+model CaseFile {
+  id           String   @id @default(cuid())
+  caseId       String
+  case         Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  storedName   String
+  originalName String
+  mimeType     String
+  sizeBytes    Int
+  path         String
+  createdAt    DateTime @default(now())
+}
+
+/// Seed only real, sourced programs. Never invent coverage.
+model CoverageProgram {
+  id                     String  @id @default(cuid())
+  manufacturer           String
+  vehicleModels          String
+  modelYearsStart        Int?
+  modelYearsEnd          Int?
+  engine                 String?
+  transmission           String?
+  component              String
+  failureSymptom         String
+  programType            String
+  programName            String
+  programNumber          String?
+  eligibilityConditions  String
+  mileageLimit           Int?
+  ageYearsLimit          Int?
+  vinLimitations         String?
+  requiredDiagnostic     String?
+  coverageDescription    String
+  reimbursementAvailable Boolean @default(false)
+  sourceUrl              String
+  sourceOrganization     String
+  sourcePublicationDate  String?
+  lastVerifiedDate       String
+  notes                  String?
+  confidenceLevel        String
+}
+
+/// Non-identifying structured outcomes for completed cases.
+model Outcome {
+  id             String   @id @default(cuid())
+  caseId         String
+  case           Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  vehicleYear    Int?
+  vehicleMake    String?
+  vehicleModel   String?
+  repairCategory String?
+  quotedPrice    Float?
+  whatHappened   String
+  amountPaid     Float?
+  createdAt      DateTime @default(now())
+}
